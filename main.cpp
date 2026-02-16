@@ -9,8 +9,9 @@ int main()
     auto window = sf::RenderWindow(sf::VideoMode({winWidth, winHeight}), "Electrostatic Simulation");
     window.setFramerateLimit(60);
 
-    Particle prot({500.f, 400.f}, 1);
-    Particle el({550.f, 400.f}, -1);
+    Particle prot({50.f, 40.f}, 1);
+    Particle el({55.f, 45.f}, -1);
+    std::vector<Particle> particles = {prot, el};
 
     while (window.isOpen())
     {
@@ -24,15 +25,19 @@ int main()
         }
 
         window.clear(sf::Color(40, 44, 52));
-        prot.setParticleProperties();
-        prot.drawGlowOutside(window);
-        prot.drawGlow(window);
-        prot.drawBody(window);
 
-        el.setParticleProperties();
-        el.drawGlowOutside(window);
-        el.drawGlow(window);
-        el.drawBody(window);
+        for (auto& p : particles) {
+            p.checkForParticle(particles);
+        }
+        for (auto& p : particles) {
+            p.move();
+        }
+
+        for (auto& p : particles) {
+            p.drawGlowOutside(window);
+            p.drawGlow(window);
+            p.drawBody(window);
+        }
 
         window.display();
     }
