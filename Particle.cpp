@@ -43,20 +43,14 @@ void Particle::setParticleProperties()
     {
     case 1: //proton
         this->mass = 1836.f;
-        this->shape.setRadius(10.f);
         this->radius = 10.f;
-        this->glowMiddle.setRadius(this->shape.getRadius() * 2);
-        this->glowOutside.setRadius(this->shape.getRadius() * 3);
         this->shape.setFillColor(sf::Color(255, 77, 86));
         this->glowMiddle.setFillColor(sf::Color(255, 77, 86, 50));
         this->glowOutside.setFillColor(sf::Color(255, 77, 86, 25));
         break;
     case -1: //electron
         this->mass = 1.f;
-        this->shape.setRadius(3.f);
         this->radius = 3.f;
-        this->glowMiddle.setRadius(this->shape.getRadius() * 2);
-        this->glowOutside.setRadius(this->shape.getRadius() * 3);
         this->shape.setFillColor(sf::Color(33, 188, 255));
         this->glowMiddle.setFillColor(sf::Color(33, 188, 255, 50));
         this->glowOutside.setFillColor(sf::Color(33, 188, 255, 25));
@@ -64,6 +58,9 @@ void Particle::setParticleProperties()
     default:
         break;
     }
+    this->shape.setRadius(this->radius);
+    this->glowMiddle.setRadius(this->radius * 2);
+    this->glowOutside.setRadius(this->radius * 3);
     this->glowMiddle.setOrigin({this->glowMiddle.getRadius(), this->glowMiddle.getRadius()});
     this->glowOutside.setOrigin({this->glowOutside.getRadius(), this->glowOutside.getRadius()});
     this->shape.setOrigin({this->shape.getRadius(), this->shape.getRadius()});
@@ -123,7 +120,7 @@ sf::Vector2f Particle::getForceByColoumbLaw(Particle &otherParticle)
     float distance = getDistanceBetweenAParticle(otherParticle.getPosition());
     sf::Vector2f directionVector = otherParticle.getPosition() - this->position;
     directionVector = this->normalizeVector(directionVector);
-    float force = k * (this->charge * otherParticle.getCharge()) / (distance * distance);
+    float force = (-1) * k * (this->charge * otherParticle.getCharge()) / (distance * distance);
     return directionVector * force;
 }
 

@@ -9,9 +9,17 @@ int main()
     auto window = sf::RenderWindow(sf::VideoMode({winWidth, winHeight}), "Electrostatic Simulation");
     window.setFramerateLimit(60);
 
-    Particle prot(1);
-    Particle el(-1);
-    std::vector<Particle> particles = {prot, el};
+    std::vector<Particle> particles;
+    for (int i = 0; i < 8; i++)
+    {
+        particles.push_back(Particle(1));
+    }
+
+    for (int i = 0; i < 15; i++)
+    {
+        particles.push_back(Particle(-1));
+    }
+    
 
     while (window.isOpen())
     {
