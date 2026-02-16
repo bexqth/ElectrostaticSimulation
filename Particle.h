@@ -15,7 +15,7 @@ private:
     sf::CircleShape glowOutside;
 
 public:
-    Particle(sf::Vector2f position, int charge);
+    Particle(int charge);
     ~Particle();
     sf::Vector2f getPosition();
     int getCharge() const;

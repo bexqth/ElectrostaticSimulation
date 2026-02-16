@@ -1,10 +1,20 @@
 #include "Particle.h"
 #include <iostream>
+#include <random>
 
 using namespace std;
 
-Particle::Particle(sf::Vector2f position, int charge) : position(position), charge(charge)
+Particle::Particle(int charge) : charge(charge)
 {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distrX(100, 900);
+    uniform_int_distribution<> distrY(100, 500);
+    float randomXPos = distrX(gen);
+    float randomYPos = distrY(gen);
+    cout << randomXPos << endl;
+    cout << randomYPos << endl;
+    this->position = sf::Vector2f(randomXPos, randomYPos);
     this->shape.setPosition(this->position);
     this->glowMiddle.setPosition(this->position);
     this->glowOutside.setPosition(this->position);
