@@ -34,6 +34,7 @@ void Particle::setParticleProperties()
     case 1: //proton
         this->mass = 1836.f;
         this->shape.setRadius(10.f);
+        this->radius = 10.f;
         this->glowMiddle.setRadius(this->shape.getRadius() * 2);
         this->glowOutside.setRadius(this->shape.getRadius() * 3);
         this->shape.setFillColor(sf::Color(255, 77, 86));
@@ -43,6 +44,7 @@ void Particle::setParticleProperties()
     case -1: //electron
         this->mass = 1.f;
         this->shape.setRadius(3.f);
+        this->radius = 3.f;
         this->glowMiddle.setRadius(this->shape.getRadius() * 2);
         this->glowOutside.setRadius(this->shape.getRadius() * 3);
         this->shape.setFillColor(sf::Color(33, 188, 255));
@@ -61,15 +63,38 @@ void Particle::update()
 {
 }
 
-void Particle::move()
+void Particle::move(int maxWidth, int maxHeight)
 {
     this->velocity += this->acceleration;
     this->velocity *= 0.99f;
     this->position += this->velocity;
+    this->checkBoundries(maxWidth, maxHeight);
     this->shape.setPosition(this->position);
     this->glowMiddle.setPosition(this->position);
     this->glowOutside.setPosition(this->position);
     this->acceleration = sf::Vector2f(0.f, 0.f);
+}
+
+void Particle::checkBoundries(int maxWidth, int maxHeight)
+{
+    float step = 10.0f;
+    if (this->position.x + this->radius + step > maxWidth) {
+        this->velocity.x *= -1;
+        this->position.x = maxWidth - this->radius - step;
+
+    } else if (this->position.x - this->radius - step < 0) {
+        this->velocity.x *= -1;
+        this->position.x = this->radius + step;
+    }
+
+    if (this->position.y + this->radius + step > maxHeight) {
+        this->velocity.y *= -1;
+       this->position.y = maxHeight - this->radius - step;
+
+    } else if (this->position.y - this->radius - step < 0) {
+         this->velocity.y *= -1;
+        this->position.y = this->radius + step;
+    }
 }
 
 void Particle::checkForParticle(std::vector<Particle>& particles)
@@ -78,7 +103,6 @@ void Particle::checkForParticle(std::vector<Particle>& particles)
         if(this != &particle) {
             sf::Vector2f forceVector = this->getForceByColoumbLaw(particle);
             this->acceleration += forceVector / this->mass;
-            cout << this->acceleration.x << " " << this->acceleration.y << endl;
         }
     }
 }

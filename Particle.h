@@ -9,6 +9,7 @@ private:
     sf::Vector2f position;
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
+    float radius;
     sf::CircleShape shape;
     sf::CircleShape glowMiddle;
     sf::CircleShape glowOutside;
@@ -20,7 +21,8 @@ public:
     int getCharge() const;
     void setParticleProperties();
     void update();
-    void move();
+    void move(int maxWidth, int maxHeight);
+    void checkBoundries(int maxWidth, int maxHeight);
     void checkForParticle(std::vector<Particle>& particles);
     float getDistanceBetweenAParticle(sf::Vector2f particlePosition);
     sf::Vector2f getForceByColoumbLaw(Particle& otherParticle);

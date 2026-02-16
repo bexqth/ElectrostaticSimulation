@@ -30,7 +30,7 @@ int main()
             p.checkForParticle(particles);
         }
         for (auto& p : particles) {
-            p.move();
+            p.move(winWidth, winHeight);
         }
 
         for (auto& p : particles) {
