@@ -1,0 +1,12 @@
+build/
+bin/
+obj/
+
+.vscode/
+.history/
+*.log
+
+.DS_Store
+
+*.zip
+*.tar.gz
