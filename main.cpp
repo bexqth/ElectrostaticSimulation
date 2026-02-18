@@ -10,12 +10,14 @@ int main()
     window.setFramerateLimit(60);
 
     std::vector<Particle> particles;
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 1; i++)
     {
         particles.push_back(Particle(1));
     }
 
-    for (int i = 0; i < 100; i++)
+
+
+    for (int i = 0; i < 1; i++)
     {
         particles.push_back(Particle(-1));
     }
@@ -45,6 +47,7 @@ int main()
             p.drawGlowOutside(window);
             p.drawGlow(window);
             p.drawBody(window);
+            p.drawTail(window);
         }
 
         window.display();

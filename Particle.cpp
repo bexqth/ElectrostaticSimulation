@@ -19,8 +19,10 @@ Particle::Particle(int charge) : charge(charge)
     this->glowMiddle.setPosition(this->position);
     this->glowOutside.setPosition(this->position);
     this->acceleration = sf::Vector2f(0.,0.);
+    this->velocity = {0,0};
     this->charge = charge;
-    this->dt = 0.05f;
+    this->dt = 1.f;
+    this->trailMaxSize = 40;
     this->setParticleProperties();
 }
 
@@ -44,6 +46,7 @@ void Particle::setParticleProperties()
     {
     case 1: //proton
         this->mass = 1836.f;
+        //this->mass = 1.f;
         this->radius = 10.f;
         this->shape.setFillColor(sf::Color(255, 77, 86));
         this->glowMiddle.setFillColor(sf::Color(255, 77, 86, 50));
@@ -75,6 +78,12 @@ void Particle::move(int maxWidth, int maxHeight)
 {
     this->velocity += this->acceleration * this->dt;
     this->position += this->velocity * this->dt;
+
+    this->trailPositions.push_back(this->position);
+    if(this->trailPositions.size() > this->trailMaxSize) {
+        this->trailPositions.pop_front();
+    }
+
     //this->checkBoundries(maxWidth, maxHeight);
     this->shape.setPosition(this->position);
     this->glowMiddle.setPosition(this->position);
@@ -84,7 +93,7 @@ void Particle::move(int maxWidth, int maxHeight)
 
 void Particle::checkBoundries(int maxWidth, int maxHeight)
 {
-    float step = 10.0f;
+    float step = 100.f;
     if (this->position.x + this->radius + step > maxWidth) {
         this->velocity.x *= -1;
         this->position.x = maxWidth - this->radius - step;
@@ -116,12 +125,13 @@ void Particle::checkForParticle(std::vector<Particle>& particles)
 
 sf::Vector2f Particle::getForceByColoumbLaw(Particle &otherParticle)
 {
-    float k = 50.f;
-    float epsilon = 5.f;
+    float k = 5000.f;
+    float epsilon = 500.f;
     float distance = getDistanceBetweenAParticle(otherParticle.getPosition());
     sf::Vector2f directionVector = otherParticle.getPosition() - this->position;
     directionVector = this->normalizeVector(directionVector);
-    float force = (-1) * k * (this->charge * otherParticle.getCharge()) / (distance * distance) + epsilon;
+    float force = (-1) * k * (this->charge * otherParticle.getCharge()) / (distance * distance + epsilon);
+    cout << force  << endl;
     return directionVector * force;
 }
 
@@ -155,4 +165,19 @@ void Particle::drawGlowOutside(sf::RenderWindow &window) {
 
 void Particle::drawBody(sf::RenderWindow &window) {
     window.draw(this->shape);
+}
+
+void Particle::drawTail(sf::RenderWindow &window)
+{
+    sf::VertexArray vertexArray(sf::PrimitiveType::LineStrip, this->trailPositions.size());
+
+    auto color = this->glowMiddle.getFillColor();
+    int opacity = 200 / this->trailPositions.size();
+    for(int i = 0; i < trailPositions.size(); i++) {
+        vertexArray[i].position = this->trailPositions[i];
+        vertexArray[i].color = sf::Color(color.r, color.g, color.b, opacity * i);
+        
+    }
+    
+    window.draw(vertexArray); 
 }

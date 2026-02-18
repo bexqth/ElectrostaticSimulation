@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <deque>
 
 class Particle
 {
@@ -14,6 +15,9 @@ private:
     sf::CircleShape shape;
     sf::CircleShape glowMiddle;
     sf::CircleShape glowOutside;
+
+    std::deque<sf::Vector2f> trailPositions;
+    int trailMaxSize;
 
 public:
     Particle(int charge);
@@ -31,6 +35,7 @@ public:
     void drawGlow(sf::RenderWindow& window);
     void drawGlowOutside(sf::RenderWindow& window);
     void drawBody(sf::RenderWindow& window);
+    void drawTail(sf::RenderWindow& window);
 
 
 };
