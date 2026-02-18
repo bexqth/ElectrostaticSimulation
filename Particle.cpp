@@ -20,6 +20,7 @@ Particle::Particle(int charge) : charge(charge)
     this->glowOutside.setPosition(this->position);
     this->acceleration = sf::Vector2f(0.,0.);
     this->charge = charge;
+    this->dt = 0.05f;
     this->setParticleProperties();
 }
 
@@ -72,10 +73,9 @@ void Particle::update()
 
 void Particle::move(int maxWidth, int maxHeight)
 {
-    this->velocity += this->acceleration;
-    this->velocity *= 0.99f;
-    this->position += this->velocity;
-    this->checkBoundries(maxWidth, maxHeight);
+    this->velocity += this->acceleration * this->dt;
+    this->position += this->velocity * this->dt;
+    //this->checkBoundries(maxWidth, maxHeight);
     this->shape.setPosition(this->position);
     this->glowMiddle.setPosition(this->position);
     this->glowOutside.setPosition(this->position);
@@ -117,10 +117,11 @@ void Particle::checkForParticle(std::vector<Particle>& particles)
 sf::Vector2f Particle::getForceByColoumbLaw(Particle &otherParticle)
 {
     float k = 50.f;
+    float epsilon = 5.f;
     float distance = getDistanceBetweenAParticle(otherParticle.getPosition());
     sf::Vector2f directionVector = otherParticle.getPosition() - this->position;
     directionVector = this->normalizeVector(directionVector);
-    float force = (-1) * k * (this->charge * otherParticle.getCharge()) / (distance * distance);
+    float force = (-1) * k * (this->charge * otherParticle.getCharge()) / (distance * distance) + epsilon;
     return directionVector * force;
 }
 

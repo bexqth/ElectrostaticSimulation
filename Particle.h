@@ -10,6 +10,7 @@ private:
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
     float radius;
+    float dt;
     sf::CircleShape shape;
     sf::CircleShape glowMiddle;
     sf::CircleShape glowOutside;
