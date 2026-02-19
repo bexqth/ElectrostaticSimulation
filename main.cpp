@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Particle.h"
+#include "Simulation.h"
 
 int main()
 {
@@ -9,18 +10,8 @@ int main()
     auto window = sf::RenderWindow(sf::VideoMode({winWidth, winHeight}), "Electrostatic Simulation");
     window.setFramerateLimit(60);
 
-    std::vector<Particle> particles;
-    for (int i = 0; i < 1; i++)
-    {
-        particles.push_back(Particle(1));
-    }
-
-
-
-    for (int i = 0; i < 1; i++)
-    {
-        particles.push_back(Particle(-1));
-    }
+    Simulation simulation(winWidth, winHeight);
+    simulation.createParticles();
     
 
     while (window.isOpen())
@@ -34,22 +25,9 @@ int main()
         
         }
 
+        simulation.update();
         window.clear(sf::Color(40, 44, 52));
-
-        for (auto& p : particles) {
-            p.checkForParticle(particles);
-        }
-        for (auto& p : particles) {
-            p.move(winWidth, winHeight);
-        }
-
-        for (auto& p : particles) {
-            p.drawGlowOutside(window);
-            p.drawGlow(window);
-            p.drawBody(window);
-            p.drawTail(window);
-        }
-
+        simulation.draw(window);
         window.display();
     }
 

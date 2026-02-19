@@ -4,17 +4,17 @@
 
 using namespace std;
 
-Particle::Particle(int charge) : charge(charge)
+Particle::Particle(float positionX, float positionY, int charge) : positionX(positionX), positionY(positionY), charge(charge)
 {
-    random_device rd;
+    /*random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> distrX(100, 900);
     uniform_int_distribution<> distrY(100, 500);
     float randomXPos = distrX(gen);
     float randomYPos = distrY(gen);
     cout << randomXPos << endl;
-    cout << randomYPos << endl;
-    this->position = sf::Vector2f(randomXPos, randomYPos);
+    cout << randomYPos << endl;*/
+    this->position = sf::Vector2f(positionX, positionY);
     this->shape.setPosition(this->position);
     this->glowMiddle.setPosition(this->position);
     this->glowOutside.setPosition(this->position);

@@ -7,6 +7,8 @@ class Particle
 private:
     float mass;
     int charge; // -1 / 1
+    float positionX;
+    float positionY;
     sf::Vector2f position;
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
@@ -20,7 +22,7 @@ private:
     int trailMaxSize;
 
 public:
-    Particle(int charge);
+    Particle(float positionX, float positionY, int charge);
     ~Particle();
     sf::Vector2f getPosition();
     int getCharge() const;
