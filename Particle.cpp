@@ -6,23 +6,14 @@ using namespace std;
 
 Particle::Particle(sf::Vector2f position, int charge) : position(position), charge(charge)
 {
-    /*random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> distrX(100, 900);
-    uniform_int_distribution<> distrY(100, 500);
-    float randomXPos = distrX(gen);
-    float randomYPos = distrY(gen);
-    cout << randomXPos << endl;
-    cout << randomYPos << endl;*/
-    //this->position = sf::Vector2f(positionX, positionY);
     this->shape.setPosition(this->position);
     this->glowMiddle.setPosition(this->position);
     this->glowOutside.setPosition(this->position);
     this->acceleration = sf::Vector2f(0.,0.);
     this->velocity = {0,0};
     this->charge = charge;
-    this->dt = 1.f;
-    this->trailMaxSize = 40;
+    this->dt = 0.01f;
+    this->trailMaxSize = 200;
     this->setParticleProperties();
 }
 
@@ -76,8 +67,11 @@ void Particle::update()
 
 void Particle::move(int maxWidth, int maxHeight)
 {
+    //this->velocity += this->acceleration * this->dt;
+    //this->position += this->velocity * this->dt;
+
+    this->position = this->position + this->velocity * this->dt + 0.5f * this->acceleration * (this->dt * this->dt);
     this->velocity += this->acceleration * this->dt;
-    this->position += this->velocity * this->dt;
 
     this->trailPositions.push_back(this->position);
     if(this->trailPositions.size() > this->trailMaxSize) {
@@ -131,7 +125,7 @@ sf::Vector2f Particle::getForceByColoumbLaw(Particle &otherParticle)
     sf::Vector2f directionVector = otherParticle.getPosition() - this->position;
     directionVector = this->normalizeVector(directionVector);
     float force = (-1) * k * (this->charge * otherParticle.getCharge()) / (distance * distance + epsilon);
-    cout << force  << endl;
+    //cout << force  << endl;
     return directionVector * force;
 }
 

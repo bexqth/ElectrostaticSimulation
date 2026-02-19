@@ -38,11 +38,23 @@ void Simulation::draw(sf::RenderWindow &window)
 
 void Simulation::createParticles()
 {
-    this->particles.push_back(Particle(sf::Vector2f(this->maxWidth / 2, this->maxHeight / 2), 1));
-    for(int i = 0; i < 10; i++) {
+    //this->particles.push_back(Particle(sf::Vector2f(this->maxWidth / 2, this->maxHeight / 2), 1));
+    int count = 4;
+    float widthStep = (this->maxWidth - 200) / (count - 1);
+    for(int i = 0; i < count; i++) {
+        this->particles.push_back(Particle(sf::Vector2f(i * widthStep + 100, this->maxHeight / 3), 1));
+    }
+
+    for(int i = 0; i < count; i++) {
+        this->particles.push_back(Particle(sf::Vector2f(i * widthStep + 100, 2 * this->maxHeight / 3), 1));
+    }
+
+
+    for(int i = 0; i < 40; i++) {
         this->particles.push_back(Particle(this->generateRandomPosition(), -1));
     }
 }
+
 
 sf::Vector2f Simulation::generateRandomPosition()
 {
