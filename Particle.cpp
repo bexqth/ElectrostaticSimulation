@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Particle::Particle(float positionX, float positionY, int charge) : positionX(positionX), positionY(positionY), charge(charge)
+Particle::Particle(sf::Vector2f position, int charge) : position(position), charge(charge)
 {
     /*random_device rd;
     mt19937 gen(rd());
@@ -14,7 +14,7 @@ Particle::Particle(float positionX, float positionY, int charge) : positionX(pos
     float randomYPos = distrY(gen);
     cout << randomXPos << endl;
     cout << randomYPos << endl;*/
-    this->position = sf::Vector2f(positionX, positionY);
+    //this->position = sf::Vector2f(positionX, positionY);
     this->shape.setPosition(this->position);
     this->glowMiddle.setPosition(this->position);
     this->glowOutside.setPosition(this->position);

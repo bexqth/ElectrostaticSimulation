@@ -22,7 +22,7 @@ private:
     int trailMaxSize;
 
 public:
-    Particle(float positionX, float positionY, int charge);
+    Particle(sf::Vector2f position, int charge);
     ~Particle();
     sf::Vector2f getPosition();
     int getCharge() const;

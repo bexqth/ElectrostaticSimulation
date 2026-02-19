@@ -38,7 +38,10 @@ void Simulation::draw(sf::RenderWindow &window)
 
 void Simulation::createParticles()
 {
-    this->particles.push_back(Particle(this->maxWidth / 2, this->maxHeight / 2, 1));
+    this->particles.push_back(Particle(sf::Vector2f(this->maxWidth / 2, this->maxHeight / 2), 1));
+    for(int i = 0; i < 10; i++) {
+        this->particles.push_back(Particle(this->generateRandomPosition(), -1));
+    }
 }
 
 sf::Vector2f Simulation::generateRandomPosition()
