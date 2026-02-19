@@ -12,7 +12,7 @@ Particle::Particle(sf::Vector2f position, int charge) : position(position), char
     this->acceleration = sf::Vector2f(0.,0.);
     this->velocity = {0,0};
     this->charge = charge;
-    this->dt = 0.01f;
+    this->dt = 0.1f;
     this->trailMaxSize = 200;
     this->setParticleProperties();
 }
@@ -69,9 +69,10 @@ void Particle::move(int maxWidth, int maxHeight)
 {
     //this->velocity += this->acceleration * this->dt;
     //this->position += this->velocity * this->dt;
+    this->old_a = this->acceleration;
 
-    this->position = this->position + this->velocity * this->dt + 0.5f * this->acceleration * (this->dt * this->dt);
-    this->velocity += this->acceleration * this->dt;
+    this->position = this->position + this->velocity * this->dt + 0.5f * this->old_a * (this->dt * this->dt);
+    this->velocity += 0.5f * (this->new_a + this->old_a) * dt;
 
     this->trailPositions.push_back(this->position);
     if(this->trailPositions.size() > this->trailMaxSize) {
@@ -120,11 +121,11 @@ void Particle::checkForParticle(std::vector<Particle>& particles)
 sf::Vector2f Particle::getForceByColoumbLaw(Particle &otherParticle)
 {
     float k = 5000.f;
-    float epsilon = 500.f;
+    float epsilon = 25.f;
     float distance = getDistanceBetweenAParticle(otherParticle.getPosition());
-    sf::Vector2f directionVector = otherParticle.getPosition() - this->position;
+    sf::Vector2f directionVector = this->position - otherParticle.getPosition();
     directionVector = this->normalizeVector(directionVector);
-    float force = (-1) * k * (this->charge * otherParticle.getCharge()) / (distance * distance + epsilon);
+    float force = k * (this->charge * otherParticle.getCharge()) / (distance * distance + epsilon);
     //cout << force  << endl;
     return directionVector * force;
 }
@@ -174,4 +175,38 @@ void Particle::drawTail(sf::RenderWindow &window)
     }
     
     window.draw(vertexArray); 
+}
+
+void Particle::setAcceleration(sf::Vector2f newA)
+{
+    this->acceleration = newA;
+}
+
+void Particle::setOldAcceleration(sf::Vector2f oldA)
+{
+    this->old_a = oldA;
+}
+
+sf::Vector2f Particle::getAcceleration()
+{
+    return this->acceleration;
+}
+
+void Particle::movePosition()
+{
+    this->old_a = this->acceleration;
+    this->position += this->velocity * this->dt + 0.5f * this->old_a * (this->dt * this->dt);
+    this->shape.setPosition(this->position);
+    this->glowMiddle.setPosition(this->position);
+    this->glowOutside.setPosition(this->position);
+
+    this->trailPositions.push_back(this->position);
+    if(this->trailPositions.size() > this->trailMaxSize) {
+        this->trailPositions.pop_front();
+    }
+}
+
+void Particle::moveVelocity()
+{
+    velocity += 0.5f * (this->old_a + this->acceleration) * this->dt;
 }

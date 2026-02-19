@@ -16,14 +16,33 @@ Simulation::~Simulation()
 
 void Simulation::update()
 {
-    for (auto& p : particles) {
+    /*for (auto& p : particles) {
         p.checkForParticle(particles);
     }
     
     for (auto& p : particles) {
         p.move(this->maxWidth, this->maxHeight);
+    }*/
+
+    for (auto& p : particles) {
+        p.setOldAcceleration(p.getAcceleration());
     }
-    
+
+    for (auto& p : particles) {
+        p.movePosition(); 
+    }
+
+    for (auto& p : particles) {
+        p.setAcceleration({0.f, 0.f});
+    }
+
+    for (auto& p : particles) {
+        p.checkForParticle(particles); 
+    }
+
+    for (auto& p : particles) {
+        p.moveVelocity(); 
+    }
 }
 
 void Simulation::draw(sf::RenderWindow &window)
@@ -64,7 +83,7 @@ sf::Vector2f Simulation::generateRandomPosition()
     uniform_int_distribution<> distrY(100, 500);
     float randomXPos = distrX(gen);
     float randomYPos = distrY(gen);
-    cout << randomXPos << endl;
-    cout << randomYPos << endl;
+    //cout << randomXPos << endl;
+    //cout << randomYPos << endl;
     return sf::Vector2f(randomXPos, randomYPos);
 }

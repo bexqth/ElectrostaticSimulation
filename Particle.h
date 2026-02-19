@@ -18,6 +18,9 @@ private:
     sf::CircleShape glowMiddle;
     sf::CircleShape glowOutside;
 
+    sf::Vector2f old_a;
+    sf::Vector2f new_a;
+
     std::deque<sf::Vector2f> trailPositions;
     int trailMaxSize;
 
@@ -38,6 +41,11 @@ public:
     void drawGlowOutside(sf::RenderWindow& window);
     void drawBody(sf::RenderWindow& window);
     void drawTail(sf::RenderWindow& window);
+    void setAcceleration(sf::Vector2f newA);
+    void setOldAcceleration(sf::Vector2f oldA);
+    sf::Vector2f getAcceleration();
+    void movePosition();
+    void moveVelocity();
 
 
 };
